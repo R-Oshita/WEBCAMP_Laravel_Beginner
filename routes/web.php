@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ use App\Http\Controllers\AuthController;
 
 // タスク管理システム
 Route::get('/',[AuthController::class,'index']);
+Route::get('/task/list',[TaskController::class,'list']);
 
 // テスト用
 Route::get('/welcome', [WelcomeController::class, 'index']);
