@@ -9,19 +9,26 @@ use App\Models\Task as TaskModel;
 
 class TaskController extends Controller
 {
+
     //タスク一覧ページを表示する
 
     public function list(){
+        
+  // 1Page当たりの表示アイテム数を設定
+    $per_page = 2;
+
         $list = TaskModel::where('user_id',Auth::id())
         ->orderBy('priority','DESC')
         ->orderBy('period')
         ->orderBy('created_at')
-        ->get();
-        $sql = TaskModel::where('user_id',Auth::id())
-        ->orderBy('priority','DESC')
-        ->orderBy('period')
-        ->orderBy('created_at')
-        ->toSql();
+        ->paginate($per_page);
+        // ->get();
+        
+        // $sql = TaskModel::where('user_id',Auth::id())
+        // ->orderBy('priority','DESC')
+        // ->orderBy('period')
+        // ->orderBy('created_at')
+        // ->toSql();
         // echo "<pre>\n"; var_dump($sql,$list); exit;
         // var_dump($sql);
 
@@ -56,5 +63,6 @@ class TaskController extends Controller
         // リダイレクト
         return redirect('/task/list');
     }
+
   
 }
