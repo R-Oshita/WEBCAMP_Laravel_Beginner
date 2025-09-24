@@ -23,13 +23,17 @@ use App\Http\Controllers\TestController;
 
 // タスク管理システム
 Route::get('/', [AuthController::class, 'index']) -> name('front.index');
-Route::middleware(['auth'])->group(function(){
-    Route::get('/task/list',[TaskController::class,'list']);
-    Route::post('/task/register', [TaskController::class, 'register']);
-    Route::get('/logout',[AuthController::class,'logout']);
-});
 // Route::get('/task/list',[TaskController::class,'list']);
 Route::post('/login',[AuthController::class,'login']);
+Route::middleware(['auth'])->group(function(){
+    Route::prefix('/task')->group(function(){
+    Route::get('/list',[TaskController::class,'list']);
+    Route::post('/register', [TaskController::class, 'register']);
+    Route::get('/detail/{task_id}',[TaskController::class,'detail'])->whereNumber('task_id')->name('detail');
+    });
+
+    Route::get('/logout',[AuthController::class,'logout']);
+});
 
 // テスト用
 Route::get('/welcome', [WelcomeController::class, 'index']);
