@@ -25,10 +25,7 @@ class TaskController extends Controller
         $per_page = 2;
 
         // 一覧の取得
-        $list = TaskModel::where('user_id', Auth::id())
-            ->orderBy('priority', 'DESC')
-            ->orderBy('period')
-            ->orderBy('created_at')
+        $list = $this->getListBuilder()
             ->paginate($per_page);
         // ->get();
         /*
@@ -206,10 +203,11 @@ class TaskController extends Controller
 
             // トランザクション終了
             DB::commit();
-        // 完了メッセージ出力
+            // 完了メッセージ出力
             $request->session()->flash('front.task_completed_success', true);
-        } catch(\Throwable $e) {
-            var_dump($e->getMessage());exit;
+        } catch (\Throwable $e) {
+            var_dump($e->getMessage());
+            exit;
 
             // トランザクション異常終了
             DB::rollBack();
@@ -220,5 +218,69 @@ class TaskController extends Controller
 
         // 一覧に移動する
         return redirect('/task/list');
+    }
+
+    // csvダウンロード
+    public function csvDownload()
+    {
+          $data_list = [
+            'id' => 'タスクID',
+            'name' => 'タスク名',
+            'priority' => '重要度',
+            'period' => '期限',
+            'detail' => 'タスク詳細',
+            'created_at' => 'タスク作成日',
+            'updated_at' => 'タスク修正日',
+        ];
+        // 「ダウンロードさせたいCSV」を作成する
+        // データを取得する
+        $list = $this->getListBuilder()->get();
+
+        // バッファリングを開始
+        ob_start();
+        // var_dump($list->toArray()); exit;
+
+        // 書き込み先を出力したファイルハンドルを作成する
+        $file =new \SplFileObject('php://output','w');
+
+        // ヘッダを書き込む
+        $file->fputcsv(array_values($data_list));
+
+        // CSVをファイルに書き込む（出力する）
+        foreach($list as $datum){
+            $awk = []; //作業領域の確保
+            // $data_listに書いてある順番に、書いてある要素だけを$awkに格納する
+       foreach($data_list as $k => $v) {
+                if ($k === 'priority') {
+                    $awk[] = $datum->getPriorityString();
+                } else {
+                    $awk[] = $datum->$k;
+                }
+            }
+            // CSVの1行を出力
+            $file->fputcsv($awk);
+        }
+
+        // 現在のバッファの中身を取得し、出力バッファを削除する
+        $csv_string = ob_get_clean();
+
+        // 文字コードを変換する
+        $csv_string_sjis = mb_convert_encoding($csv_string,'SJIS','UTF-8');
+
+// ダウンロードファイル名の作成
+$download_filename = 'task_list'.date('Ymd').'.csv';
+        // CSVを出力する
+        return response($csv_string_sjis)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="'.$download_filename.'"');
+    }
+
+    // 一覧用のIlluminate\Database\Rloquent\Builderインスタンスの取得
+    protected function getListBuilder()
+    {
+        return TaskModel::where('user_id', Auth::id())
+            ->orderBy('priority', 'DESC')
+            ->orderBy('period')
+            ->orderBy('created_at');
     }
 }
