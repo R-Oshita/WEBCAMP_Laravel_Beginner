@@ -1,7 +1,6 @@
 @extends('layout')
 
 
-
 {{-- メインコンテンツ--}}
 @section('contents')
     <h1>ログイン</h1>
