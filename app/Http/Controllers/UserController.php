@@ -23,19 +23,20 @@ class UserController extends Controller
       // validate済みのデータの取得
       $datum = $request->validated();
       // var_dump($datum);exit;
-         $datum['password'] = Hash::make($datum['password']);
+      $datum['password'] = Hash::make($datum['password']);
 
-          // user_id の追加
-        $datum['user_id'] = Auth::id();
+      // user_id の追加
+      $datum['user_id'] = Auth::id();
 
-              // テーブルへのINSERT
-        try {
-            $r = UserModel::create($datum);
-        } catch (\Throwable $e) {
-            // XXX 本当はログに書く等の処理をする。今回は一端「出力する」だけ
-            echo $e->getMessage();
-            exit;
-        }
+    
+      // テーブルへのINSERT
+      try {
+         $r = UserModel::create($datum);
+      } catch (\Throwable $e) {
+         // XXX 本当はログに書く等の処理をする。今回は一端「出力する」だけ
+         echo $e->getMessage();
+         exit;
+      }
 
       // タスク登録成功
       $request->session()->flash('front.user_register_success', true);
