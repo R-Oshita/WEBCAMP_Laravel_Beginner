@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('completed_tasks', function (Blueprint $table) {
-             $table->unsignedInteger('id');
+            $table->unsignedInteger('id');
             $table->string('name', 128)->comment('タスク名');
             $table->date('period')->comment('タスクの期限');
             $table->text('detail')->comment('タスクの詳細');

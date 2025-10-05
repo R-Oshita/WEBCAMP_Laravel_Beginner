@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRegisterPostRequest;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Task as TaskModel;
 use Illuminate\Support\Facades\DB;
@@ -223,7 +224,7 @@ class TaskController extends Controller
     // csvダウンロード
     public function csvDownload()
     {
-          $data_list = [
+        $data_list = [
             'id' => 'タスクID',
             'name' => 'タスク名',
             'priority' => '重要度',
@@ -241,16 +242,16 @@ class TaskController extends Controller
         // var_dump($list->toArray()); exit;
 
         // 書き込み先を出力したファイルハンドルを作成する
-        $file =new \SplFileObject('php://output','w');
+        $file = new \SplFileObject('php://output', 'w');
 
         // ヘッダを書き込む
         $file->fputcsv(array_values($data_list));
 
         // CSVをファイルに書き込む（出力する）
-        foreach($list as $datum){
+        foreach ($list as $datum) {
             $awk = []; //作業領域の確保
             // $data_listに書いてある順番に、書いてある要素だけを$awkに格納する
-       foreach($data_list as $k => $v) {
+            foreach ($data_list as $k => $v) {
                 if ($k === 'priority') {
                     $awk[] = $datum->getPriorityString();
                 } else {
@@ -265,14 +266,14 @@ class TaskController extends Controller
         $csv_string = ob_get_clean();
 
         // 文字コードを変換する
-        $csv_string_sjis = mb_convert_encoding($csv_string,'SJIS','UTF-8');
+        $csv_string_sjis = mb_convert_encoding($csv_string, 'SJIS', 'UTF-8');
 
-// ダウンロードファイル名の作成
-$download_filename = 'task_list'.date('Ymd').'.csv';
+        // ダウンロードファイル名の作成
+        $download_filename = 'task_list' . date('Ymd') . '.csv';
         // CSVを出力する
         return response($csv_string_sjis)
             ->header('Content-Type', 'text/csv')
-            ->header('Content-Disposition', 'attachment; filename="'.$download_filename.'"');
+            ->header('Content-Disposition', 'attachment; filename="' . $download_filename . '"');
     }
 
     // 一覧用のIlluminate\Database\Rloquent\Builderインスタンスの取得
@@ -284,3 +285,4 @@ $download_filename = 'task_list'.date('Ymd').'.csv';
             ->orderBy('created_at');
     }
 }
+
