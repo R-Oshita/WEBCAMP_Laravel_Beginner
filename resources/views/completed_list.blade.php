@@ -13,7 +13,7 @@
             </div>
         @endif
 
-<h1>タスクの一覧</h1>
+<h1>完了タスクの一覧</h1>
 <a href="/task/list">タスク一覧へもどる</a>
         <table border="1">
             <tr>
@@ -51,4 +51,4 @@
         @else
             次に進む
         @endif
-<!-- @endsection    -->
+@endsection
