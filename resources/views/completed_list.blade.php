@@ -14,7 +14,7 @@
         @endif
 
 <h1>完了タスクの一覧</h1>
-<a href="/task/list">タスク一覧へもどる</a>
+<a href="/task/list">タスク一覧へ戻る</a>
         <table border="1">
             <tr>
                 <th>タスク名</th>
@@ -51,4 +51,5 @@
         @else
             次に進む
         @endif
+
 @endsection

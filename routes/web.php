@@ -27,8 +27,8 @@ Route::get('/', [AuthController::class, 'index'])->name('front.index');
 Route::post('/login', [AuthController::class, 'login']);
 
 // 会員登録画面
-Route::get('/user/register',[UserController::class,'index']);
-Route::post('/user/register',[UserController::class,'register'])->name('front.user.register');
+Route::get('/user/register', [UserController::class, 'index']);
+Route::post('/user/register', [UserController::class, 'register'])->name('front.user.register');
 
 // 認可処理
 Route::middleware(['auth'])->group(function () {
@@ -42,13 +42,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/complete/{task_id}', [TaskController::class, 'complete'])->whereNumber('task_id')->name('complete');
         Route::get('/csv/download', [TaskController::class, 'csvDownload']);
     });
-    Route::prefix('/admin')->group(function () {
-        Route::get('', [AdminAuthController::class, 'index'])->name('admin.index');
-        Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
-        Route::get('/top', [AdminHomeController::class, 'top'])->name('admin.top');
+
         Route::get('/logout', [AuthController::class, 'logout']);
-    });
-    Route::get('/completed_tasks/list',[CompletedTaskController::class,'list']);
+
+    // Route::prefix('/admin')->group(function () {
+    //     Route::get('', [AdminAuthController::class, 'index'])->name('admin.index');
+    //     Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
+    //     Route::get('/top', [AdminHomeController::class, 'top'])->name('admin.top');
+    // });
+    Route::get('/completed_tasks/list', [CompletedTaskController::class, 'list']);
 });
 
 // テスト用
@@ -66,6 +68,6 @@ Route::prefix('/admin')->group(function () {
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/top', [AdminHomeController::class, 'top'])->name('admin.top');
         Route::get('/logout', [AdminAuthController::class, 'logout']);
-         Route::get('/user/list', [AdminUserController::class, 'list'])->name('admin.user.list');
+        Route::get('/user/list', [AdminUserController::class, 'list'])->name('admin.user.list');
     });
 });

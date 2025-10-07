@@ -19,8 +19,10 @@ class UserController extends Controller
         // データの取得
         $group_by_column = ['users.id', 'users.name'];
         $list = UserModel::select($group_by_column)
+            ->selectRaw('count(tasks.id) AS task_num')
             ->leftJoin('tasks', 'users.id', '=', 'tasks.user_id')
             ->groupBy($group_by_column)
+            ->orderBy('users.id')
             ->get();
         // echo "<pre>\n";
         // var_dump($list->toArray());
