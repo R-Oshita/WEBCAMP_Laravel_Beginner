@@ -30,10 +30,10 @@
 
 <form action="/task/register" method="post">
     @csrf
-    タスク名:<input type="text" name="name" value="{{ old('name') }}"><br>
-    期限:<input type="date" name="period" value="{{ old('period') }}"><br>
-    タスク詳細:<textarea name="detail">{{ old('detail') }}</textarea><br>
-    重要度:<label><input type="radio" name="priority" value="1" @if (old('priority')==1) checked @endif>低い</label> /
+    タスク名：<input type="text" name="name" value="{{ old('name') }}"><br>
+    期限：<input type="date" name="period" value="{{ old('period') }}"><br>
+    タスク詳細：<textarea name="detail">{{ old('detail') }}</textarea><br>
+    重要度：<label><input type="radio" name="priority" value="1" @if (old('priority')==1) checked @endif>低い</label> /
     <label><input type="radio" name="priority" value="2" @if (old('priority', 2)==2) checked @endif>普通</label> /
     <label><input type="radio" name="priority" value="3" @if (old('priority')==3) checked @endif>高い</label><br>
     <button>タスクを登録する</button>
